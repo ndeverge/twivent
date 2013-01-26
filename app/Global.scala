@@ -19,7 +19,7 @@ object Global extends GlobalSettings {
       def receive = {
         case Tick => {
           Logger.info("tock at " + new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()))
-          WS.url("http://twivent.herokuapp.com").get.map(response => println("ping status: " + response.status))
+          WS.url("http://twivent.herokuapp.com").get.map(response => Logger.info("ping status: " + response.status))
         }
       }
     }))
