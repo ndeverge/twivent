@@ -1,30 +1,21 @@
-import play.api.GlobalSettings
-import play.api.Logger
-import play.api.Application
-import play.libs.Akka
-import scala.concurrent.duration._
+import scala.concurrent.duration.DurationInt
 import akka.actor.Props
-import akka.actor.Actor
-import play.api.libs.concurrent.Execution.Implicits._
-import java.text.SimpleDateFormat
-import java.util.Date
-import play.api.libs.ws.WS
+import play.api.Application
+import play.api.GlobalSettings
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.libs.Akka
+import play.api.Play
 
 object Global extends GlobalSettings {
 
   override def onStart(app: Application) {
 
-    val Tick = "tick"
-    val tickActor = Akka.system.actorOf(Props(new Actor {
-      def receive = {
-        case Tick => {
-          Logger.info("tock at " + new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()))
-          WS.url("http://twivent.herokuapp.com").get.map(response => Logger.info("ping status: " + response.status))
-        }
-      }
-    }))
+    // get the port from the "http.port" environment variable
+    val runningPort = Play.configuration(app).getInt("http.port").orElse(Some(9000)).get
+    val urlToPing = "http://localhost:%d%s".format(runningPort, controllers.routes.Ping.ping.url)
 
-    Akka.system.scheduler.schedule(0 seconds, 10 minutes, tickActor, "tick")
+    val pingActor = Akka.system.actorOf(Props(new PingActor(urlToPing)))
+    Akka.system.scheduler.schedule(0 seconds, 10 minutes, pingActor, "ping")
   }
 
 }
