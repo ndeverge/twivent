@@ -14,10 +14,11 @@ object Global extends GlobalSettings {
 
   override def onStart(app: Application) {
 
-    // get the port from the "http.port" environment variable
-    //val runningPort = Play.configuration(app).getInt("http.port").orElse(Some(9000)).get
-    val runningPort = Option(System.getProperty("http.port")).orElse(Some("9000")).get
-    val urlToPing = "http://localhost:%s%s".format(runningPort, controllers.routes.Ping.ping.url)
+    val controllerPath = controllers.routes.Ping.ping.url
+    val urlToPing = play.api.Play.mode(app) match {
+      case play.api.Mode.Prod => "http://twivent.herokuapp.com%s".format(controllerPath)
+      case _ => "http://localhost:9000%s".format(controllerPath)
+    }
 
     val pingActor = Akka.system.actorOf(Props(new PingActor(urlToPing)))
     Logger.info("Scheduling ping on " + urlToPing)
