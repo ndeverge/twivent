@@ -15,13 +15,16 @@ object Global extends GlobalSettings {
   override def onStart(app: Application) {
 
     val controllerPath = controllers.routes.Ping.ping.url
-    val urlToPing = play.api.Play.mode(app) match {
-      case play.api.Mode.Prod => "http://twivent.herokuapp.com%s".format(controllerPath)
-      case _ => "http://localhost:9000%s".format(controllerPath)
+    play.api.Play.mode(app) match {
+      case play.api.Mode.Prod => schedulePing("http://twivent.herokuapp.com%s".format(controllerPath))
+      case _ => // do not schedule anything for Dev or Test
     }
 
-    val pingActor = Akka.system.actorOf(Props(new PingActor(urlToPing)))
+  }
+
+  def schedulePing(urlToPing: String) = {
     Logger.info("Scheduling ping on " + urlToPing)
+    val pingActor = Akka.system.actorOf(Props(new PingActor(urlToPing)))
     Akka.system.scheduler.schedule(0 seconds, 10 minutes, pingActor, "ping")
   }
 
