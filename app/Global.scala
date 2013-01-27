@@ -16,8 +16,8 @@ object Global extends GlobalSettings {
 
     // get the port from the "http.port" environment variable
     //val runningPort = Play.configuration(app).getInt("http.port").orElse(Some(9000)).get
-    val runningPort = System.getProperty("http.port").orElse("9000")
-    val urlToPing = "http://localhost:%d%s".format(runningPort, controllers.routes.Ping.ping.url)
+    val runningPort = Option(System.getProperty("http.port")).orElse(Some("9000")).get
+    val urlToPing = "http://localhost:%s%s".format(runningPort, controllers.routes.Ping.ping.url)
 
     val pingActor = Akka.system.actorOf(Props(new PingActor(urlToPing)))
     Logger.info("Scheduling ping on " + urlToPing)
