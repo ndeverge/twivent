@@ -9,8 +9,10 @@ class PingActor(url: String) extends Actor {
 
   def receive = {
     case _ => {
-      WS.url(url).get.map(
-        response => Logger.info(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()) + ": ping status: " + response.status))
+      WS.url(url).get.map(response => {
+        val now = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date())
+        Logger.info(now + ": ping status: " + response.status)
+      })
     }
   }
 

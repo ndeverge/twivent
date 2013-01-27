@@ -15,7 +15,7 @@ object Global extends GlobalSettings {
     val urlToPing = "http://localhost:%d%s".format(runningPort, controllers.routes.Ping.ping.url)
 
     val pingActor = Akka.system.actorOf(Props(new PingActor(urlToPing)))
-    Akka.system.scheduler.schedule(0 seconds, 10 minutes, pingActor, "ping")
+    Akka.system.scheduler.schedule(0 seconds, 10 seconds, pingActor, "ping")
   }
 
 }
