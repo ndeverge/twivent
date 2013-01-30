@@ -1,3 +1,5 @@
+package actor;
+
 import akka.actor.Actor
 import play.api.Logger
 import play.api.libs.ws.WS

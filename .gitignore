@@ -16,3 +16,4 @@ dist
 /.project
 /RUNNING_PID
 /.settings
+*.p12
