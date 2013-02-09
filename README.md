@@ -67,6 +67,7 @@ xxxxxxxxxxxxxx==
 -----END PRIVATE KEY-----
 	"""
 	calendarId = "xxxxxxxxxxxx@group.calendar.google.com"
+	applicationName = "YOUR_APP_NAME-YOUR_ORGANISATION_NAME/1.0"
 }
 ```
 

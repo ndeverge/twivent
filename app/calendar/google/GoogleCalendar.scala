@@ -18,7 +18,6 @@ object GoogleCalendar extends Calendar {
 
     val HTTP_TRANSPORT = new NetHttpTransport()
     val JSON_FACTORY = new JacksonFactory()
-    val APPLICATION_NAME = "Twivent-WMIT/1.0"
 
     val accountId = Play.current.configuration.getString("google-calendar.accountId").get // orElse from the env
 
@@ -40,8 +39,10 @@ object GoogleCalendar extends Calendar {
       .setServiceAccountPrivateKey(key)
       .build();
 
+    val applicationName = Play.current.configuration.getString("google-calendar.applicationName").get
+
     new com.google.api.services.calendar.Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).setApplicationName(
-      APPLICATION_NAME).build()
+      applicationName).build()
   }
 
   override def nextIncomingEvents(): Seq[Event] = {
