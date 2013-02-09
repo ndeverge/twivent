@@ -1,7 +1,5 @@
 package calendar.google
 
-import calendar.Calendar
-import calendar.Event
 import org.joda.time.DateTime
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
 import com.google.api.services.calendar.CalendarScopes
@@ -12,7 +10,9 @@ import java.security.KeyFactory
 import play.api.Play
 import com.google.api.client.util.Base64
 
-object GoogleCalendar extends Calendar {
+case class Event(title: String, location: Option[String] = None, description: Option[String] = None, start: DateTime, end: Option[DateTime] = None)
+
+object GoogleCalendar {
 
   lazy val calendarService: com.google.api.services.calendar.Calendar = {
 
@@ -20,8 +20,6 @@ object GoogleCalendar extends Calendar {
     val JSON_FACTORY = new JacksonFactory()
 
     val accountId = Play.current.configuration.getString("google-calendar.accountId").get // orElse from the env
-
-    // openssl pkcs12 -in conf/keys/google-calendar.p12 -nodes -nocerts |  openssl pkcs8 -topk8 -nocrypt
 
     val privateKey: Option[String] = Play.current.configuration.getString("google-calendar.privateKey").map(s => s.replace("-----BEGIN PRIVATE KEY-----", "").replace("-----END PRIVATE KEY-----", "")) // orElse from the env
 
@@ -45,7 +43,7 @@ object GoogleCalendar extends Calendar {
       applicationName).build()
   }
 
-  override def nextIncomingEvents(): Seq[Event] = {
+  def nextIncomingEvents(): Seq[Event] = {
     Seq(new Event(title = "", start = new DateTime))
   }
 }
