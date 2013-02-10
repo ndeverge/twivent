@@ -6,7 +6,7 @@ Tweet reminders from Google Calendar events.
 
 * Playframework 2.1 Scala
 
-## How to configure it
+## How to configure it using a configuration file
 
 ### Google Calendar API
 
@@ -70,6 +70,32 @@ xxxxxxxxxxxxxx==
 	applicationName = "YOUR_APP_NAME-YOUR_ORGANISATION_NAME/1.0"
 }
 ```
+
+
+## How to configure it for running under Heroku
+
+Since you probably do not want your private data (private key, accountId etc.) to be store in your Git repo (I strongly discourage you to do so), and since you cannot upload files on Heroku without using a Git repo, the only way to configure your private data on Heroku is to use environment variables.
+
+To do this, you have to use the `heroku config:add`command with the several env variables (take a look at the previous paragraph how to get them):
+
+* google-calendar.accountId
+* google-calendar.privateKey
+* google-calendar.calendarId
+* google-calendar.applicationName
+
+For example:
+
+```
+$> heroku config:add google-calendar.accountId="xxxxxxxxxxxx@developer.gserviceaccount.com"
+
+BEWARE: the private key must be on one line
+$> heroku config:add google-calendar.privateKey="-----BEGIN PRIVATE KEY-----xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx..xxxx==-----END PRIVATE KEY-----"
+
+$> heroku config:add google-calendar.calendarId="xxxxxxxxxxxx@group.calendar.google.com"
+
+$> heroku config:add google-calendar.applicationName="YOUR_APP_NAME-YOUR_ORGANISATION_NAME/1.0"
+```
+
 
 ## License
 
