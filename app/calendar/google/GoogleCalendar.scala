@@ -1,6 +1,5 @@
 package calendar.google
 
-import org.joda.time.DateTime
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
 import com.google.api.services.calendar.CalendarScopes
 import com.google.api.client.http.javanet.NetHttpTransport
@@ -12,8 +11,9 @@ import com.google.api.client.util.Base64
 import com.google.api.services.calendar.model.Events
 import com.google.api.services.calendar.model.Event
 import collection.JavaConversions._
-
-//case class Event(title: String, location: Option[String] = None, description: Option[String] = None, start: DateTime, end: Option[DateTime] = None)
+import com.google.api.client.util.DateTime
+import java.util.Date
+import java.util.TimeZone
 
 object GoogleCalendar {
 
@@ -68,7 +68,8 @@ object GoogleCalendar {
       calendarId =>
         calendarService.map {
 
-          service => service.events().list(calendarId).setSingleEvents(true).setOrderBy("startTime").execute().getItems().toList
+          val now = new DateTime(new Date(), TimeZone.getTimeZone("Europe/Paris"))
+          service => service.events().list(calendarId).setSingleEvents(true).setTimeMin(now).setOrderBy("startTime").execute().getItems().toList
         }
     }
 

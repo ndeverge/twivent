@@ -7,6 +7,7 @@ import play.api.test.Helpers.running
 import play.api.test.FakeApplication
 import play.api.Play
 import com.google.api.services.calendar.model.Event
+import java.util.TimeZone
 
 class GoogleCalendarSpec extends Specification {
 
@@ -33,7 +34,12 @@ class GoogleCalendarSpec extends Specification {
     "retrieve the incoming events" in {
       running(FakeApplication()) {
 
-        GoogleCalendar.nextIncomingEvents.foreach(f => println(f.getClass().getName()))
+        val events = GoogleCalendar.nextIncomingEvents
+
+        events must beSome
+
+        events.get.size must beGreaterThan(0)
+
       }
     }
 
