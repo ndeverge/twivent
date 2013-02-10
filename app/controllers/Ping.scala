@@ -16,14 +16,4 @@ object Ping extends Controller {
     Ok("Alive !!")
   }
 
-  def index = Action {
-    Async {
-      implicit val timeout = Timeout(5.seconds)
-      val pingActor = Akka.system.actorOf(Props(new PingActor("")))
-      (pingActor ? "hello").mapTo[String].map { response =>
-        Ok(response)
-      }
-    }
-  }
-
 }
