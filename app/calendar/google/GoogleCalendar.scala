@@ -43,6 +43,12 @@ object GoogleCalendar {
       applicationName).build()
   }
 
+  lazy val calendar = {
+    val calendarId: String = Play.current.configuration.getString("google-calendar.calendarId").get
+
+    calendarService.calendars().get(calendarId).execute();
+  }
+
   def nextIncomingEvents(): Seq[Event] = {
     Seq(new Event(title = "", start = new DateTime))
   }

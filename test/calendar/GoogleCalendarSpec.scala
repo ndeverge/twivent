@@ -15,10 +15,7 @@ class GoogleCalendarSpec extends Specification {
 
       running(FakeApplication()) {
 
-        val calendarId: String = Play.current.configuration.getString("google-calendar.calendarId").get
-
-        val wmitCalendar = GoogleCalendar.calendarService.calendars().get(calendarId).execute();
-        println(wmitCalendar.getSummary())
+        println(GoogleCalendar.calendar.getSummary())
       }
     }
 
