@@ -15,7 +15,8 @@ class GoogleCalendarSpec extends Specification {
 
       running(FakeApplication()) {
 
-        println(GoogleCalendar.calendar.getSummary())
+    	  GoogleCalendar.calendar.getSummary() must beEqualTo("We Meet In Toulouse")
+        
       }
     }
 

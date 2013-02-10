@@ -19,9 +19,9 @@ object GoogleCalendar {
     val HTTP_TRANSPORT = new NetHttpTransport()
     val JSON_FACTORY = new JacksonFactory()
 
-    val accountId = Play.current.configuration.getString("google-calendar.accountId").get // orElse from the env
+    val accountId = getPropertyFromConfOrEnvironment("google-calendar.accountId").get
 
-    val privateKey: Option[String] = Play.current.configuration.getString("google-calendar.privateKey").map(s => s.replace("-----BEGIN PRIVATE KEY-----", "").replace("-----END PRIVATE KEY-----", "")) // orElse from the env
+    val privateKey = getPropertyFromConfOrEnvironment("google-calendar.privateKey").map(s => s.replace("-----BEGIN PRIVATE KEY-----", "").replace("-----END PRIVATE KEY-----", ""))
 
     // FIXME : if None
 
@@ -37,19 +37,23 @@ object GoogleCalendar {
       .setServiceAccountPrivateKey(key)
       .build();
 
-    val applicationName = Play.current.configuration.getString("google-calendar.applicationName").get
+    val applicationName = getPropertyFromConfOrEnvironment("google-calendar.applicationName").get
 
     new com.google.api.services.calendar.Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).setApplicationName(
       applicationName).build()
   }
 
   lazy val calendar = {
-    val calendarId: String = Play.current.configuration.getString("google-calendar.calendarId").get
+    val calendarId: String = getPropertyFromConfOrEnvironment("google-calendar.calendarId").get
 
     calendarService.calendars().get(calendarId).execute();
   }
 
   def nextIncomingEvents(): Seq[Event] = {
     Seq(new Event(title = "", start = new DateTime))
+  }
+
+  private def getPropertyFromConfOrEnvironment(name: String): Option[String] = {
+    Play.current.configuration.getString(name).orElse(Some(sys.env(name)))
   }
 }
