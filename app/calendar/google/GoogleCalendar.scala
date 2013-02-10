@@ -9,8 +9,11 @@ import java.security.spec.PKCS8EncodedKeySpec
 import java.security.KeyFactory
 import play.api.Play
 import com.google.api.client.util.Base64
+import com.google.api.services.calendar.model.Events
+import com.google.api.services.calendar.model.Event
+import collection.JavaConversions._
 
-case class Event(title: String, location: Option[String] = None, description: Option[String] = None, start: DateTime, end: Option[DateTime] = None)
+//case class Event(title: String, location: Option[String] = None, description: Option[String] = None, start: DateTime, end: Option[DateTime] = None)
 
 object GoogleCalendar {
 
@@ -50,13 +53,25 @@ object GoogleCalendar {
   }
 
   lazy val calendar = {
-    getPropertyFromConfOrEnvironment("google-calendar.calendarId").map {
-      calendarId => calendarService.get.calendars().get(calendarId).execute();
+    getPropertyFromConfOrEnvironment("google-calendar.calendarId").flatMap {
+      calendarId =>
+        calendarService.map {
+
+          service => service.calendars().get(calendarId).execute()
+        }
     }
   }
 
-  def nextIncomingEvents(): Seq[Event] = {
-    Seq(new Event(title = "", start = new DateTime))
+  def nextIncomingEvents(): Option[List[Event]] = {
+
+    getPropertyFromConfOrEnvironment("google-calendar.calendarId").flatMap {
+      calendarId =>
+        calendarService.map {
+
+          service => service.events().list(calendarId).setSingleEvents(true).setOrderBy("startTime").execute().getItems().toList
+        }
+    }
+
   }
 
   private def getPropertyFromConfOrEnvironment(name: String): Option[String] = {
