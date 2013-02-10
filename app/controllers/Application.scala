@@ -16,7 +16,7 @@ object Application extends Controller {
   def index = Action {
 
     val wmitCalendar = GoogleCalendar.calendar
-    Ok("Index !!" + wmitCalendar.getSummary)
+    Ok("Index !!" + wmitCalendar.map(c => c.getSummary))
   }
 
 }

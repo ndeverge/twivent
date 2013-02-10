@@ -14,39 +14,45 @@ case class Event(title: String, location: Option[String] = None, description: Op
 
 object GoogleCalendar {
 
-  lazy val calendarService: com.google.api.services.calendar.Calendar = {
+  lazy val calendarService: Option[com.google.api.services.calendar.Calendar] = {
 
-    val HTTP_TRANSPORT = new NetHttpTransport()
-    val JSON_FACTORY = new JacksonFactory()
+    getPropertyFromConfOrEnvironment("google-calendar.accountId").flatMap {
+      accountId =>
+        getPropertyFromConfOrEnvironment("google-calendar.privateKey").flatMap {
+          privateKey =>
+            {
+              getPropertyFromConfOrEnvironment("google-calendar.applicationName").map {
+                applicationName =>
 
-    val accountId = getPropertyFromConfOrEnvironment("google-calendar.accountId").get
+                  val HTTP_TRANSPORT = new NetHttpTransport()
+                  val JSON_FACTORY = new JacksonFactory()
 
-    val privateKey = getPropertyFromConfOrEnvironment("google-calendar.privateKey").map(s => s.replace("-----BEGIN PRIVATE KEY-----", "").replace("-----END PRIVATE KEY-----", ""))
+                  val encoded = Base64.decodeBase64(privateKey.replace("-----BEGIN PRIVATE KEY-----", "").replace("-----END PRIVATE KEY-----", ""));
+                  val keyFactory = KeyFactory.getInstance("RSA");
+                  val ks = new PKCS8EncodedKeySpec(encoded);
+                  val key = keyFactory.generatePrivate(ks);
 
-    // FIXME : if None
+                  val credential = new GoogleCredential.Builder().setTransport(HTTP_TRANSPORT)
+                    .setJsonFactory(JSON_FACTORY)
+                    .setServiceAccountId(accountId)
+                    .setServiceAccountScopes(CalendarScopes.CALENDAR)
+                    .setServiceAccountPrivateKey(key)
+                    .build();
 
-    val encoded = Base64.decodeBase64(privateKey.get);
-    val keyFactory = KeyFactory.getInstance("RSA");
-    val ks = new PKCS8EncodedKeySpec(encoded);
-    val key = keyFactory.generatePrivate(ks);
+                  new com.google.api.services.calendar.Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).setApplicationName(
+                    applicationName).build()
+              }
 
-    val credential = new GoogleCredential.Builder().setTransport(HTTP_TRANSPORT)
-      .setJsonFactory(JSON_FACTORY)
-      .setServiceAccountId(accountId)
-      .setServiceAccountScopes(CalendarScopes.CALENDAR)
-      .setServiceAccountPrivateKey(key)
-      .build();
+            }
+        }
+    }
 
-    val applicationName = getPropertyFromConfOrEnvironment("google-calendar.applicationName").get
-
-    new com.google.api.services.calendar.Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).setApplicationName(
-      applicationName).build()
   }
 
   lazy val calendar = {
-    val calendarId: String = getPropertyFromConfOrEnvironment("google-calendar.calendarId").get
-
-    calendarService.calendars().get(calendarId).execute();
+    getPropertyFromConfOrEnvironment("google-calendar.calendarId").map {
+      calendarId => calendarService.get.calendars().get(calendarId).execute();
+    }
   }
 
   def nextIncomingEvents(): Seq[Event] = {
