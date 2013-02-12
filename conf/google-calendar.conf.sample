@@ -1,9 +1,0 @@
-# Take a look at the README.md for instructions
-google-calendar {
-	accountId = "YOUR GOOGLE ACCOUNT ID"
-	privateKey ="""
-	YOUR PRIVATE KEY EXTRACTED FROM THE P12 FILE
-	"""
-	calendarId = "YOUR CALENDAR ID"
-	applicationName = "YOUR_APP_NAME-YOUR_ORGANISATION_NAME/1.0"
-}

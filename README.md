@@ -33,7 +33,7 @@ xxxxxxxxxxxxxx==
 -----END PRIVATE KEY-----
 ```
 
-Then copy and paste it in the `conf/google-calendar.conf` file, in the `privateKey` property.
+Then copy and paste it in the `conf/twivent.conf` file, in the `privateKey` property.
 
 From the Google API Console, you also have to get your `accountId`, it looks like:
 
@@ -41,17 +41,17 @@ From the Google API Console, you also have to get your `accountId`, it looks lik
 xxxxxxxxxxxx@developer.gserviceaccount.com
 ```
 
-Copy and paste it in the `conf/google-calendar.conf` file, in the `accountId` property.
+Copy and paste it in the `conf/twivent.conf` file, in the `accountId` property.
 
 ### Setting up your Google Calendar
 
 You can get a list of your calendars using the following doc [https://developers.google.com/google-apps/calendar/v3/reference/calendarList/list](https://developers.google.com/google-apps/calendar/v3/reference/calendarList/list) by clicking the "Execute button".
 
-Look for the id of your calendar, and then copy and paste it in the `conf/google-calendar.conf` file, in the `calendarId` property.
+Look for the id of your calendar, and then copy and paste it in the `conf/twivent.conf` file, in the `calendarId` property.
 
 ### To sum up
 
-Your `conf/google-calendar.conf` file shoud look like:
+Your `conf/twivent.conf` file shoud look like:
 
 ```
 google-calendar {
