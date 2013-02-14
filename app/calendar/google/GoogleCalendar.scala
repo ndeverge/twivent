@@ -9,13 +9,14 @@ import java.security.KeyFactory
 import play.api.Play
 import com.google.api.client.util.Base64
 import com.google.api.services.calendar.model.Events
-import com.google.api.services.calendar.model.Event
 import collection.JavaConversions._
 import com.google.api.client.util.DateTime
 import java.util.Date
 import java.util.TimeZone
 
 object GoogleCalendar {
+
+  case class Event(title: String, location: Option[String] = None, description: Option[String] = None, start: org.joda.time.DateTime, end: Option[org.joda.time.DateTime] = None)
 
   lazy val calendarService: Option[com.google.api.services.calendar.Calendar] = {
 
@@ -68,12 +69,27 @@ object GoogleCalendar {
         }
     } match {
       case None => List()
-      case Some(eventList) => eventList
+      case Some(eventList) => eventList.map(toEvent(_))
     }
 
   }
 
   private def getPropertyFromConfOrEnvironment(name: String): Option[String] = {
     Play.current.configuration.getString(name).orElse(Some(sys.env(name)))
+  }
+
+  private def toEvent(googleEvent: com.google.api.services.calendar.model.Event) = {
+    Event(googleEvent.getSummary(), Option(googleEvent.getLocation()), Option(googleEvent.getDescription()), googleEvent.getStart(), Option(googleEvent.getEnd()))
+  }
+
+  /**
+   * Implicit conversion (no explanatary call needed)
+   */
+  implicit def toDateTime(googleDateTime: com.google.api.services.calendar.model.EventDateTime): org.joda.time.DateTime = {
+    if (googleDateTime != null && googleDateTime.getDateTime() != null) {
+      new org.joda.time.DateTime(googleDateTime.getDateTime().getValue())
+    } else {
+      null
+    }
   }
 }
