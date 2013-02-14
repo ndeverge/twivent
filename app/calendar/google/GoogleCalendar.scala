@@ -57,7 +57,7 @@ object GoogleCalendar {
     }
   }
 
-  def nextIncomingEvents(): Option[List[Event]] = {
+  def nextIncomingEvents(): List[Event] = {
 
     getPropertyFromConfOrEnvironment("google-calendar.calendarId").flatMap {
       calendarId =>
@@ -66,6 +66,9 @@ object GoogleCalendar {
           val now = new DateTime(new Date(), TimeZone.getTimeZone("Europe/Paris"))
           service => service.events().list(calendarId).setSingleEvents(true).setTimeMin(now).setOrderBy("startTime").execute().getItems().toList
         }
+    } match {
+      case None => List()
+      case Some(eventList) => eventList
     }
 
   }

@@ -36,9 +36,9 @@ class GoogleCalendarSpec extends Specification {
 
         val events = GoogleCalendar.nextIncomingEvents
 
-        events must beSome
+        events must not beNull
 
-        events.get.size must beGreaterThan(0)
+        events.size must beGreaterThan(0)
 
       }
     }
