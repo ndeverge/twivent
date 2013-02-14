@@ -6,4 +6,5 @@ case class Event(
   location: Option[String] = None,
   description: Option[String] = None,
   start: org.joda.time.DateTime,
-  end: Option[org.joda.time.DateTime] = None)
+  end: Option[org.joda.time.DateTime] = None,
+  notified: Boolean = false)
