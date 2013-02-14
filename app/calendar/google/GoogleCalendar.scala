@@ -8,15 +8,13 @@ import java.security.spec.PKCS8EncodedKeySpec
 import java.security.KeyFactory
 import play.api.Play
 import com.google.api.client.util.Base64
-import com.google.api.services.calendar.model.Events
 import collection.JavaConversions._
 import com.google.api.client.util.DateTime
 import java.util.Date
 import java.util.TimeZone
+import calendar.Event
 
 object GoogleCalendar {
-
-  case class Event(title: String, location: Option[String] = None, description: Option[String] = None, start: org.joda.time.DateTime, end: Option[org.joda.time.DateTime] = None)
 
   lazy val calendarService: Option[com.google.api.services.calendar.Calendar] = {
 
@@ -79,7 +77,7 @@ object GoogleCalendar {
   }
 
   private def toEvent(googleEvent: com.google.api.services.calendar.model.Event) = {
-    Event(googleEvent.getSummary(), Option(googleEvent.getLocation()), Option(googleEvent.getDescription()), googleEvent.getStart(), Option(googleEvent.getEnd()))
+    Event(googleEvent.getId(), googleEvent.getSummary(), Option(googleEvent.getLocation()), Option(googleEvent.getDescription()), googleEvent.getStart(), Option(googleEvent.getEnd()))
   }
 
   /**

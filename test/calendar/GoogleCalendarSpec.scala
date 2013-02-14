@@ -6,7 +6,6 @@ import play.api.test.FakeApplication.apply
 import play.api.test.Helpers.running
 import play.api.test.FakeApplication
 import play.api.Play
-import com.google.api.services.calendar.model.Event
 import java.util.TimeZone
 
 class GoogleCalendarSpec extends Specification {
