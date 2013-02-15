@@ -14,7 +14,7 @@ import java.util.Date
 import java.util.TimeZone
 import calendar.Event
 
-object GoogleCalendar {
+object GoogleCalendar extends config.Config {
 
   lazy val calendarService: Option[com.google.api.services.calendar.Calendar] = {
 
@@ -70,10 +70,6 @@ object GoogleCalendar {
       case Some(eventList) => eventList.map(toEvent(_))
     }
 
-  }
-
-  private def getPropertyFromConfOrEnvironment(name: String): Option[String] = {
-    Play.current.configuration.getString(name).orElse(Some(sys.env(name)))
   }
 
   private def toEvent(googleEvent: com.google.api.services.calendar.model.Event) = {

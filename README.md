@@ -10,7 +10,9 @@ Tweet reminders from Google Calendar events.
 
 ### Google Calendar API
 
-You need a Google account and a [Google Calendar API access](https://code.google.com/apis/console).
+The Google Calendar API is used to get the incoming events which will be tweeted.
+
+First, you need a Google account and a [Google Calendar API access](https://code.google.com/apis/console).
 
 Then, you'll get a P12 file containing your private key. In order to use this key through the config file, you have to extract it from the file using the following command line from your terminal/
 
@@ -49,6 +51,22 @@ You can get a list of your calendars using the following doc [https://developers
 
 Look for the id of your calendar, and then copy and paste it in the `conf/twivent.conf` file, in the `calendarId` property.
 
+### Twitter API
+
+The Twitter API is used to send tweets on your account.
+
+To do so, you first have to get some credentials from the [Twitter Dev site](https://dev.twitter.com/) by creating a new [app](https://dev.twitter.com/apps) with "Read & Write access" using the twitter account that will be used to tweet your events.
+
+Then, create access token and you'll get: 
+
+* a consumerKey
+* a consumerSecret
+* an accessToken
+* an accessTokenSecret
+
+Copy and paste these infos in the `conf/twivent.conf` file, in the according properties.
+
+
 ### To sum up
 
 Your `conf/twivent.conf` file shoud look like:
@@ -69,6 +87,13 @@ xxxxxxxxxxxxxx==
 	calendarId = "xxxxxxxxxxxx@group.calendar.google.com"
 	applicationName = "YOUR_APP_NAME-YOUR_ORGANISATION_NAME/1.0"
 }
+
+twitter {
+	consumerKey = "xxxxxxxxxxxxxxxxxxxx"
+    consumerSecret = "xxxxxxxxxxxxxxxxxxxx"
+    accessToken = "xxxxxxxxxxxxxxxxxxxx"
+    accessTokenSecret = "xxxxxxxxxxxxxxxxxxxx"
+}
 ```
 
 
@@ -82,6 +107,10 @@ To do this, you have to use the `heroku config:add`command with the several env 
 * google-calendar.privateKey
 * google-calendar.calendarId
 * google-calendar.applicationName
+* twitter.consumerKey
+* twitter.consumerSecret
+* twitter.accessToken
+* twitter.accessTokenSecret
 
 For example:
 
@@ -94,6 +123,14 @@ $> heroku config:add google-calendar.privateKey="-----BEGIN PRIVATE KEY-----xxxx
 $> heroku config:add google-calendar.calendarId="xxxxxxxxxxxx@group.calendar.google.com"
 
 $> heroku config:add google-calendar.applicationName="YOUR_APP_NAME-YOUR_ORGANISATION_NAME/1.0"
+
+$> heroku config:add twitter.consumerKey="xxxxxxxxxxxxxxxxx"
+
+$> heroku config:add twitter.consumerSecret="xxxxxxxxxxxxxxxxx"
+
+$> heroku config:add twitter.accessToken="xxxxxxxxxxxxxxxxx"
+
+$> heroku config:add twitter.accessTokenSecret="xxxxxxxxxxxxxxxxx"
 ```
 
 

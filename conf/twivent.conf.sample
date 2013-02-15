@@ -7,3 +7,10 @@ google-calendar {
 	calendarId = "YOUR CALENDAR ID"
 	applicationName = "YOUR_APP_NAME-YOUR_ORGANISATION_NAME/1.0"
 }
+
+twitter {
+	consumerKey = "YOUR CONSUMER KEY"
+    consumerSecret = "YOUR CONSUMER SECRET"
+    accessToken = "YOUR ACCESS TOKEN"
+    accessTokenSecret = "YOUR ACCESS TOKEN SECRET"
+}

@@ -17,4 +17,4 @@ dist
 /RUNNING_PID
 /.settings
 *.p12
-google-calendar.conf
+twivent.conf
