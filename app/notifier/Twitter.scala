@@ -2,10 +2,11 @@ package notifier
 
 import twitter4j.conf.ConfigurationBuilder
 import twitter4j.TwitterFactory
+import calendar.Event
 
 object Twitter extends config.Config {
 
-  val twitterConfigurationBuilder = {
+  lazy val twitterConfigurationBuilder = {
     getPropertyFromConfOrEnvironment("twitter.consumerKey").flatMap {
       consumerKey =>
         getPropertyFromConfOrEnvironment("twitter.consumerSecret").flatMap {
@@ -24,8 +25,14 @@ object Twitter extends config.Config {
         }
     }
   }
-  val twitterFactory = twitterConfigurationBuilder.map { confBuilder => new TwitterFactory(confBuilder.build()) }
+  lazy val twitterFactory = twitterConfigurationBuilder.map { confBuilder => new TwitterFactory(confBuilder.build()) }
 
-  val twitter = twitterFactory.map { factory => factory.getInstance() }
+  lazy val twitter = twitterFactory.map { factory => factory.getInstance() }
+
+  //twitter.get.getAPIConfiguration().getShortURLLength()
+
+  def buildTweetFromEvent(eventToTweet: Event): String = {
+    s"Demain $eventToTweet.title #wmit"
+  }
 
 }

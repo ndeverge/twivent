@@ -73,7 +73,7 @@ object GoogleCalendar extends config.Config {
   }
 
   private def toEvent(googleEvent: com.google.api.services.calendar.model.Event) = {
-    Event(googleEvent.getId(), googleEvent.getSummary(), Option(googleEvent.getLocation()), Option(googleEvent.getDescription()), googleEvent.getStart(), Option(googleEvent.getEnd()))
+    Event(googleEvent.getId(), googleEvent.getSummary(), Option(googleEvent.getLocation()), Option(googleEvent.getDescription()), googleEvent.getStart(), Option(googleEvent.getEnd()), googleEvent.getHtmlLink())
   }
 
   /**

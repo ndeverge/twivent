@@ -12,10 +12,10 @@ class ReminderSpec extends Specification {
 
       val dateIn24Hours = new DateTime().plusDays(1)
 
-      val anEventToNotify = Event(id = "id1", title = "Event to notify", start = dateIn24Hours)
+      val anEventToNotify = Event(id = "id1", title = "Event to notify", start = dateIn24Hours, url = "")
 
       val dateFrom1Hour = new DateTime().minusHours(1)
-      val anEventToNotNotify = Event(id = "id2", title = "Do not notify", start = dateFrom1Hour)
+      val anEventToNotNotify = Event(id = "id2", title = "Do not notify", start = dateFrom1Hour, url = "")
 
       val incomingEvents = List(anEventToNotNotify, anEventToNotify);
 
@@ -29,7 +29,7 @@ class ReminderSpec extends Specification {
 
     "do not filter events already notified" in {
 
-      val anEventAlreadyNotified = Event(id = "id", title = "Do not notify", start = new DateTime().plusHours(1), notified = true)
+      val anEventAlreadyNotified = Event(id = "id", title = "Do not notify", start = new DateTime().plusHours(1), notified = true, url = "")
 
       val incomingEvents = List(anEventAlreadyNotified);
 
