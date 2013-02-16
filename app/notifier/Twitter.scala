@@ -45,6 +45,10 @@ object Twitter extends config.Config {
 
     template.format(title, eventToTweet.url)
   }
+  
+  def sendTweet(eventToTweet: Event) ={
+    twitter.map(_.updateStatus(buildTweetFromEvent(eventToTweet)))
+  }
 
   private def compress(stringToSumUp: String, maxSize: Int) = {
     if (stringToSumUp.size <= maxSize) {
