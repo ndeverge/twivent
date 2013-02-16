@@ -36,7 +36,7 @@ object Twitter extends config.Config {
   }
 
   def buildTweetFromEvent(eventToTweet: Event, shortURLLength: Int): String = {
-    val template = "Demain %s %s #wmit"
+    val template = "N'oubliez pas, demain, c'est %s %s #wmit"
 
     val title = {
       val maxTitleSize = 140 - (template.size - 4) - shortURLLength
@@ -45,8 +45,8 @@ object Twitter extends config.Config {
 
     template.format(title, eventToTweet.url)
   }
-  
-  def sendTweet(eventToTweet: Event) ={
+
+  def sendTweet(eventToTweet: Event) = {
     twitter.map(_.updateStatus(buildTweetFromEvent(eventToTweet)))
   }
 
