@@ -29,10 +29,30 @@ object Twitter extends config.Config {
 
   lazy val twitter = twitterFactory.map { factory => factory.getInstance() }
 
-  //twitter.get.getAPIConfiguration().getShortURLLength()
+  lazy val shortURLLength = twitter.map { _.getAPIConfiguration().getShortURLLengthHttps() }
 
   def buildTweetFromEvent(eventToTweet: Event): String = {
-    s"Demain $eventToTweet.title #wmit"
+    shortURLLength.map(buildTweetFromEvent(eventToTweet, _)).get
+  }
+
+  def buildTweetFromEvent(eventToTweet: Event, shortURLLength: Int): String = {
+    val template = "Demain %s %s #wmit"
+
+    val title = {
+      val maxTitleSize = 140 - (template.size - 4) - shortURLLength
+      compress(eventToTweet.title, maxTitleSize)
+    }
+
+    template.format(title, eventToTweet.url)
+  }
+
+  private def compress(stringToSumUp: String, maxSize: Int) = {
+    if (stringToSumUp.size <= maxSize) {
+      stringToSumUp.trim
+    } else {
+      stringToSumUp.trim.substring(0, maxSize - 3) + "..."
+    }
+
   }
 
 }
