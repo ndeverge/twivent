@@ -10,6 +10,7 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.concurrent.Akka
 import akka.actor.Props
 import actor.PingActor
+import actor.ReminderActor
 
 object Global extends GlobalSettings {
 
@@ -17,10 +18,22 @@ object Global extends GlobalSettings {
 
     val controllerPath = controllers.routes.Ping.ping.url
     play.api.Play.mode(app) match {
-      case play.api.Mode.Prod => schedulePing("http://twivent.herokuapp.com%s".format(controllerPath), app)
-      case _ => // do not schedule anything for Dev or Test
+      case play.api.Mode.Prod => {
+        schedulePing("http://twivent.herokuapp.com%s".format(controllerPath), app)
+        reminderDaemon(app)
+      }
+      case play.api.Mode.Dev => {
+        reminderDaemon(app)
+      }
+      case _ => // do not schedule anything for Test
     }
 
+  }
+
+  def reminderDaemon(app: Application) = {
+    Logger.info("Scheduling the reminder daemon")
+    val reminderActor = Akka.system(app).actorOf(Props(new ReminderActor()))
+    Akka.system(app).scheduler.schedule(0 seconds, 5 minutes, reminderActor, "reminderDaemon")
   }
 
   def schedulePing(urlToPing: String, app: Application) = {
