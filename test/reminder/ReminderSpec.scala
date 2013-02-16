@@ -39,6 +39,15 @@ class ReminderSpec extends Specification {
       eventsToNotify must beEmpty
 
     }
+
+    "do not filter event started today at 0:00" in {
+
+      val anEventStartingTodayAtMidnight = Event(id = "id", title = "Do not notify", start = new DateTime().withTimeAtStartOfDay(), url = "")
+
+      val eventsToNotify = Reminder.filterEventsToNotify(List(anEventStartingTodayAtMidnight))
+
+      eventsToNotify must beEmpty
+    }
   }
 
 }

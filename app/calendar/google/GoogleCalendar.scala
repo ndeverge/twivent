@@ -83,7 +83,7 @@ object GoogleCalendar extends config.Config {
     if (googleDateTime != null && googleDateTime.getDateTime() != null) {
       new org.joda.time.DateTime(googleDateTime.getDateTime().getValue())
     } else {
-      null
+      new org.joda.time.DateTime(googleDateTime.getDate().getValue()).withTimeAtStartOfDay()
     }
   }
 }
