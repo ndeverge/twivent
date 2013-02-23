@@ -53,7 +53,7 @@ class TwitterSpec extends Specification {
 
       val tweet = Twitter.buildTweetFromEvent(eventToTweet, shortURLLength)
 
-      tweet.size must beEqualTo(14)
+      tweet.size must beEqualTo(36)
     }
 
     "build a tweet from an Event with a HTTP Url and a fake Url shortener" in {
