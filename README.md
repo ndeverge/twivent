@@ -45,6 +45,8 @@ xxxxxxxxxxxx@developer.gserviceaccount.com
 
 Copy and paste it in the `conf/twivent.conf` file, in the `accountId` property.
 
+Also, make sure to share your calendar with this account (allowing "Make changes to events").
+
 ### Setting up your Google Calendar
 
 You can get a list of your calendars using the following doc [https://developers.google.com/google-apps/calendar/v3/reference/calendarList/list](https://developers.google.com/google-apps/calendar/v3/reference/calendarList/list) by clicking the "Execute button".
