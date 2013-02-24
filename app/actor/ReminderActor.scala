@@ -15,8 +15,10 @@ class ReminderActor extends Actor {
       Reminder.filterEventsToNotify(nextIncomingEvents).foreach {
         eventToNotify =>
           {
-            Twitter.sendTweet(eventToNotify).map(tweet => Logger.info("Tweeting " + tweet.getText()))
             GoogleCalendar.markAsNotified(eventToNotify.id)
+
+            Twitter.sendTweet(eventToNotify).map(tweet => Logger.info("Tweeting " + tweet.getText()))
+
           }
       }
     }
