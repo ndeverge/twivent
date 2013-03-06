@@ -73,5 +73,13 @@ class GoogleCalendarSpec extends Specification {
       }
     }
 
+    "retrieve an event by its id" in {
+      running(FakeApplication()) {
+        val event = GoogleCalendar.findEventById("db0oe88sncvaa7sfen16oj0n9c_20130307T063000Z")
+
+        event must beSome
+      }
+    }
+
   }
 }
