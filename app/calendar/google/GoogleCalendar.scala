@@ -92,7 +92,7 @@ object GoogleCalendar extends config.Config {
 
         Logger.info("\"%s\" at %s has been marked as notified".format(eventToMark.getSummary(), eventToMark.getStart()))
 
-        Play.current.configuration.getString("google-calendar.calendarId").flatMap {
+        getPropertyFromConfOrEnvironment("google-calendar.calendarId").flatMap {
           calendarId =>
             GoogleCalendar.calendarService.map(service => service.events().update(calendarId, eventId, addCustomProperty(eventToMark)).execute())
 
