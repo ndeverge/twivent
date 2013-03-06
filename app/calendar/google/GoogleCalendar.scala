@@ -79,7 +79,6 @@ object GoogleCalendar extends config.Config {
   def findEventById(eventId: String) = {
     Play.current.configuration.getString("google-calendar.calendarId").flatMap {
       calendarId =>
-        val now = new DateTime(new Date(), TimeZone.getTimeZone("Europe/Paris"))
         GoogleCalendar.calendarService.map(service => service.events().get(calendarId, eventId).execute())
 
     }
