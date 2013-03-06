@@ -77,7 +77,7 @@ object GoogleCalendar extends config.Config {
   }
 
   def findEventById(eventId: String) = {
-    Play.current.configuration.getString("google-calendar.calendarId").flatMap {
+    getPropertyFromConfOrEnvironment("google-calendar.calendarId").flatMap {
       calendarId =>
         GoogleCalendar.calendarService.map(service => service.events().get(calendarId, eventId).execute())
 
