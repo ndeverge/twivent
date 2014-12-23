@@ -14,8 +14,8 @@
 
 
   libraryDependencies ++= Seq(
-    "com.google.apis" % "google-api-services-calendar" % "v3-rev24-1.13.2-beta", // exclude com.google.guava#guava-jdk5;13.0!guava-jdk5.jar ?
-    "com.google.http-client" % "google-http-client-jackson2" % "1.13.1-beta",
+    "com.google.apis" % "google-api-services-calendar" % "v3-rev111-1.19.0", // exclude com.google.guava#guava-jdk5;13.0!guava-jdk5.jar ?
+    "com.google.http-client" % "google-http-client-jackson2" % "1.19.0",
     "org.twitter4j" % "twitter4j-core" % "3.0.3",
     "com.github.ndeverge" %% "autoping-play2-plugin" % "0.1.2"
 
