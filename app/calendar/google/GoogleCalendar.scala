@@ -17,6 +17,8 @@ import calendar.Event
 import play.api.Logger
 import com.google.api.services.calendar.model.Event.ExtendedProperties
 import java.util.HashMap
+import java.util.Set
+import java.util.Collections
 
 object GoogleCalendar extends config.Config {
 
@@ -36,10 +38,12 @@ object GoogleCalendar extends config.Config {
       val ks = new PKCS8EncodedKeySpec(encoded);
       val key = keyFactory.generatePrivate(ks);
 
+      val scope: Set[String] = Collections.singleton(CalendarScopes.CALENDAR);
+
       val credential = new GoogleCredential.Builder().setTransport(HTTP_TRANSPORT)
         .setJsonFactory(JSON_FACTORY)
         .setServiceAccountId(accountId)
-        .setServiceAccountScopes(CalendarScopes.CALENDAR)
+        .setServiceAccountScopes(scope)
         .setServiceAccountPrivateKey(key)
         .build();
 
@@ -55,7 +59,9 @@ object GoogleCalendar extends config.Config {
       calendarId =>
         calendarService.map {
 
-          service => service.calendars().get(calendarId).execute()
+          service => {
+            Logger.info(calendarId)
+            service.calendars().get(calendarId).execute()}
         }
     }
   }
